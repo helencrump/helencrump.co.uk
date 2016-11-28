@@ -1,0 +1,17 @@
+SetEnvIfNoCase User-Agent "Yandex|Baidu" bad_bot
+Order Deny,Allow
+Deny from env=bad_bot
+
+# deny access to git
+RedirectMatch 404 /\.git
+
+RewriteEngine On
+
+# always use SSL
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [QSA,R=301,L]
+
+# redirect 404s to homepage
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . / [R=301,L]
