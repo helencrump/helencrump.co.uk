@@ -1,0 +1,27 @@
+sudo: false
+language: python
+cache: pip
+python: 3.6
+before_script:
+- npm install -g html-minifier clean-css-cli
+script:
+- ./scripts/build website /dev/shm/helencrump.co.uk /dev/shm/helencrump.co.uk.tar.gz
+deploy:
+- provider: script
+  script: ./scripts/deploy helencrump.co.uk /dev/shm/helencrump.co.uk qa
+  skip_cleanup: true
+  on:
+    repo: helencrump/helencrump.co.uk
+    branch: qa
+- provider: script
+  script: ./scripts/deploy helencrump.co.uk /dev/shm/helencrump.co.uk prod
+  skip_cleanup: true
+  on:
+    tags: true
+- provider: releases
+  api_key:
+    secure: asWz4HSI+Wwh+u25Jk70Xjd6+FwahnCKYkAFl2pUgCl/d1xN+2v5EawuTGLAp5Bw64w3PDHI1fLzNhyBAE+yDluSfSHVLsmJ4TXFS4fYi60wBoK0zr7PpdBLKwhkMBzmrQ832NTeE3o7ZyIVzQ/n6NpzJo59DYRZoVUIqIL27Rww4wrWGLVaeoFBzt41yBgV4YF6qvZiBxSLH9zzTxjxmz70yxQCuDwl+XlOQnh2TorC1ITE6xE73Vr2KSooXNPfDUm8iPsxaSWKuSdByAyWGdUfUKAzUHc6NqH2ZrRzBa+oNgxY/g5lgvveSJlJJTFjU4bTkqgWJu2ZfmhsSHjHLd6qE8MDYJfxi5sxcsFj0msnzOjngwXWLiGRIVf/AC+m41pBwwfhZNQII9oVYLBskMMcG6k4hN5qLgzkoOc8Vgu5aZyezAqT3gNaIIKkqgI3Am5xwAbXSNQ61lEy/Rklk+a73ifvYI4WS/gQGZzb7Pd1qzisyTSc4smlZxZc9sqdBzX8QS25iWUEeg5sD69aqq8rhyE9jvvZ852/84XVRWMNI//N/Enw3Mt1iF/pu8nYFPaOp2INgfXU9z6E5vYgXAwLENsUWYJfsMuaKh+ELO74IBT/Qe9z4o5TzQX5oLpZj9yUBiZHB1MA0m7MCewkWwX6pM6AX+8BQO1WMF6GPDs=
+  skip_cleanup: true
+  file: /dev/shm/helencrump.co.uk.tar.gz
+  on:
+    tags: true
